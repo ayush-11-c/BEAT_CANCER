@@ -6,21 +6,24 @@ import MedicalRecords from "./pages/records/index";
 import ScreeningSchedule from "./pages/ScreeningSchedule";
 import SingleRecordDetails from "./pages/records/single-record-details";
 import { useStateContext } from "./context";
+import { usePrivy } from "@privy-io/react-auth";
 
 const App = () => {
-  const { user, authenticated, ready, login, currentUser } = useStateContext();
+  const { currentUser } = useStateContext();
+  const { user, authenticated, ready, login } = usePrivy();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (ready && !authenticated) {
-      login();
-    } else if (user && !currentUser) {
-      navigate("/onboarding");
-    }
-  }, [user, authenticated, ready, login, currentUser, navigate]);
+  // useEffect(() => {
+  //   if (!ready) return;
+  //   if (!authenticated) {
+  //     login();
+  //   } else if (user && !currentUser) {
+  //     navigate("/onboarding");
+  //   }
+  // }, [user, authenticated, ready, login, currentUser, navigate]);
 
   return (
-    <div className="sm:-8 relative flex min-h-screen flex-row bg-[#13131a] p-4">
+    <div className="sm:-8 relative flex min-h-screen flex-row bg-white p-4 text-black dark:bg-gray-900 dark:text-white">
       <div className="relative mr-10 hidden sm:flex">
         <Sidebar />
       </div>

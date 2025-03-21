@@ -1,18 +1,16 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
-import { db } from "../utils/dbConfig"; // Adjust the path to your dbConfig
-import { Users, Records } from "../utils/schema"; // Adjust the path to your schema definitions
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
+import { db } from "../utils/dbConfig";
+import { Users, Records } from "../utils/schema";
 import { eq } from "drizzle-orm";
+import { use } from "react";
 
-// Create a context
 const StateContext = createContext();
 
-// Provider component
 export const StateContextProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
   const [records, setRecords] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
 
-  // Function to fetch all users
   const fetchUsers = useCallback(async () => {
     try {
       const result = await db.select().from(Users).execute();
@@ -22,7 +20,6 @@ export const StateContextProvider = ({ children }) => {
     }
   }, []);
 
-  // Function to fetch user details by email
   const fetchUserByEmail = useCallback(async (email) => {
     try {
       const result = await db
@@ -38,7 +35,6 @@ export const StateContextProvider = ({ children }) => {
     }
   }, []);
 
-  // Function to create a new user
   const createUser = useCallback(async (userData) => {
     try {
       const newUser = await db
@@ -54,7 +50,6 @@ export const StateContextProvider = ({ children }) => {
     }
   }, []);
 
-  // Function to fetch all records for a specific user
   const fetchUserRecords = useCallback(async (userEmail) => {
     try {
       const result = await db
@@ -67,8 +62,6 @@ export const StateContextProvider = ({ children }) => {
       console.error("Error fetching user records:", error);
     }
   }, []);
-
-  // Function to create a new record
   const createRecord = useCallback(async (recordData) => {
     try {
       const newRecord = await db
@@ -98,6 +91,24 @@ export const StateContextProvider = ({ children }) => {
       return null;
     }
   }, []);
+  const storedTheme = localStorage.getItem("theme");
+  const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)")
+    .matches;
+    const initialTheme = storedTheme || (prefersDarkMode ? "dark" : "light");
+  const [theme, setTheme] = useState(initialTheme);
+  useEffect(()=>{
+    if(theme === "dark"){
+      document.documentElement.classList.add("dark");
+    }
+    else{
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("theme", theme);
+  }
+  ,[theme]);
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
+  };
 
   return (
     <StateContext.Provider
@@ -111,6 +122,8 @@ export const StateContextProvider = ({ children }) => {
         createRecord,
         currentUser,
         updateRecord,
+        theme,
+        toggleTheme
       }}
     >
       {children}
@@ -118,5 +131,4 @@ export const StateContextProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use the context
 export const useStateContext = () => useContext(StateContext);

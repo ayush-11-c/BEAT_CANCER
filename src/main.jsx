@@ -11,15 +11,8 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <PrivyProvider
-    appId="clz5th2t100r3sbdu44h7zzn6"
-    config={{
-      appearance: {
-        theme: "dark",
-      },
-      embeddedWallets: {
-        createOnLogin: "users-without-wallets",
-      },
-    }}
+    appId="cm8hli7du009ymvw8nsa9aknl"
+    config={{ redirectUri: window.location.origin }}
   >
     <Router>
       <StateContextProvider>

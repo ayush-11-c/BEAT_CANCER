@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { sun } from "../assets";
 import { navlinks } from "../constants";
 import { IconHeartHandshake } from "@tabler/icons-react";
+import { useStateContext } from "../context";
 
 const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => (
   <div
@@ -29,6 +30,7 @@ const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => (
 const Sidebar = () => {
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState("dashboard");
+  const { theme, toggleTheme } = useStateContext();
 
   return (
     <div className="sticky top-5 flex h-[93vh] flex-col items-center justify-between">
@@ -54,8 +56,12 @@ const Sidebar = () => {
             />
           ))}
         </div>
-
-        <Icon styles="bg-[#1c1c24] shadow-secondary" imgUrl={sun} />
+        <button
+          onClick={toggleTheme}
+          className="rounded-lg bg-gray-600 p-2 text-white dark:bg-yellow-500"
+        >
+          {theme === "light" ? "🌙 " : "☀️ "}
+        </button>
       </div>
     </div>
   );
