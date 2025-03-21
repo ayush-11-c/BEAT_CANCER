@@ -13,14 +13,14 @@ const App = () => {
   const { user, authenticated, ready, login } = usePrivy();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (!ready) return;
-  //   if (!authenticated) {
-  //     login();
-  //   } else if (user && !currentUser) {
-  //     navigate("/onboarding");
-  //   }
-  // }, [user, authenticated, ready, login, currentUser, navigate]);
+  useEffect(() => {
+    if (!ready) return;
+    if (ready && !authenticated) {
+      login();
+    } else if (user && !currentUser) {
+      navigate("/onboarding");
+    }
+  }, [user, authenticated, ready, login, currentUser, navigate]);
 
   return (
     <div className="sm:-8 relative flex min-h-screen flex-row bg-white p-4 text-black dark:bg-gray-900 dark:text-white">

@@ -43,6 +43,7 @@ const Navbar = () => {
     } else {
       login().then(() => {
         if (user) {
+          console.log("User logged in:", user);
           fetchUserInfo();
         }
       });
